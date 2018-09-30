@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<TITLE> The Canvas Tag</TITLE>
+<SCRIPT>
+function initialise(){
+	 canvas= document.getElementById("canvas_1");
+	 gl = getWebGLContext(canvas);
+	if (!gl){
+		console.log('Failed to find context');
+	}
+
+
+	var program = initShaders( gl, "vertex-shader", "fragment-shader" );
+	gl.useProgram (program);
+	gl.program = program;
+
+	 a_Position = gl.getAttribLocation(program, 'a_Position');
+
+	if (a_Position < 0) { 
+		console.log ("Failed to Get Position"); 
+		return;	
+	}
+	
+	fColorLocation = gl.getUniformLocation(program, "fColor");
+	gl.uniform4f(fColorLocation, 1.0, 0.0, 0.0, 1.0);
+
+
+	
+	canvas.addEventListener("mousedown", doMouseDown,false)
+}
+
+function render (gl){
+
+}
+
+function setRandomColor(){
+	gl.uniform4f(fColorLocation, Math.random(), Math.random(), Math.random(), 1.0);
+}
+
+function drawTriangle(canvas_x, canvas_y){
+    	var vertices = [canvas_x-0.1, canvas_y-0.1, canvas_x-0.1, canvas_y + 0.1, canvas_x + 0.1, canvas_y+0.1,];
+         // Create a new buffer object
+        var vertex_buffer = gl.createBuffer();
+
+         // Bind an empty array buffer to it
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+         
+         // Pass the vertices data to the buffer
+         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+
+         //point an attribute to the currently bound VBO
+          gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+
+         // //Enable the attribute
+          gl.enableVertexAttribArray(a_Position, canvas_x, canvas_y);
+
+          gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		  gl.clear(gl.COLOR_BUFFER_BIT);
+
+		  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+
+function doMouseDown(event){
+	canvas_x=event.pageX;
+	canvas_y=event.pageY;
+	canvas_x = (canvas_x - canvas.width / 2) / (canvas.width / 2);
+    canvas_y = (canvas.height / 2 - canvas_y) / (canvas.height / 2);
+    // 
+    drawTriangle(canvas_x, canvas_y)
+	// render(gl)
+}
+</SCRIPT>
+</HEAD>
+
+
+
+<BODY onLoad=initialise()>
+<CANVAS WIDTH="400" HEIGHT="400" ID="canvas_1"  style="background-color:black ">
+
+</CANVAS>
+<script id="vertex-shader" type="x-shader/x-vertex">		
+		attribute vec4 a_Position;
+		void
+		main()
+		{
+		  gl_PointSize = 10.0;
+          gl_Position = a_Position;
+		}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		uniform vec4 fColor;
+		void
+		main()
+		{
+		    gl_FragColor = fColor;
+		}
+	</script>
+	  
+
+  <script src="lib/webgl-utils.js"></script>
+    <script src="lib/webgl-debug.js"></script>
+    <script src="lib/cuon-utils.js"></script>
+	<script src="lib/initShaders.js"></script>
+    
+
+
+</BODY>
+</HTML>
