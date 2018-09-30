@@ -3,7 +3,50 @@
 <HEAD>
 <TITLE> The Canvas Tag</TITLE>
 <SCRIPT>
+function createButtons(){
+	// 1. Create the button
+var buttonTriangle = document.createElement("button");
+buttonTriangle.innerHTML = "Triangle";
+
+// 2. Append somewhere
+var body = document.getElementsByTagName("body")[0];
+body.appendChild(document.createElement("br"));
+body.appendChild(buttonTriangle);
+
+// 3. Add event handler
+buttonTriangle.addEventListener ("click", function() {
+  shapeSignal = 0
+});
+
+	// 1. Create the button
+var buttonQuad = document.createElement("button");
+buttonQuad.innerHTML = "Quad";
+
+// 2. Append somewhere
+var body = document.getElementsByTagName("body")[0];
+body.appendChild(buttonQuad);
+
+// 3. Add event handler
+buttonQuad.addEventListener ("click", function() {
+  shapeSignal = 1
+});
+
+// 1. Create the button
+var buttonColour = document.createElement("button");
+buttonColour.innerHTML = "Colour";
+
+// 2. Append somewhere
+var body = document.getElementsByTagName("body")[0];
+body.appendChild(buttonColour);
+
+// 3. Add event handler
+buttonColour.addEventListener ("click", function() {
+  setRandomColor()
+});
+
+}
 function initialise(){
+	createButtons()
 	 canvas= document.getElementById("canvas_1");
 	 gl = getWebGLContext(canvas);
 	if (!gl){
